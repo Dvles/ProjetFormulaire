@@ -17,10 +17,10 @@ class LivresFixtures extends Fixture
             $livre = new Livre([
 
                 'titre' => $faker->name(),
-                'prix' => $faker->text(50),
+                'prix' => $faker->numberBetween(1, 999),
                 'description' => $faker->text(),
                 'date_publication' => $faker->dateTime(),
-                'isbn' => strtoupper($faker->text(5)) . $faker->numberBetween(1000, 9999),
+                'isbn' => $faker->isbn13(),
 
             ]);
         $manager->persist($livre);
