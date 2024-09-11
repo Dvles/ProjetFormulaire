@@ -2,23 +2,25 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Aeroport;
 use DateTime;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory;
+use App\Entity\Aeroport;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AeroportFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $faker = Factory::create("fr_BE");
         
         for ($i = 0; $i < 100; $i++){
             $aeroport = new Aeroport(
                 [
-                    'nom' => 'Brussels Zaventem',
-                    'code' => 'BRU',
-                    'description' => 'on vole',
-                    'dateMiseEnService' => new DateTime()
+                    'nom' => $faker->city(),
+                    'code' => strtoupper($faker->text(5)),
+                    'description' => $faker->text(),
+                    'dateMiseEnService' => $faker->dateTime()
                 ]
             );
             $manager->persist($aeroport);

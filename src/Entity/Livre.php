@@ -43,11 +43,29 @@ class Livre
     #[ORM\ManyToMany(targetEntity: Auteur::class, inversedBy: 'livres')]
     private Collection $auteurs;
 
-    public function __construct()
+    public function hydrate(array $init)
     {
+        foreach ($init as $propriete => $valeur) {
+            $nomSet = "set" . ucfirst($propriete);
+            if (!method_exists($this, $nomSet)) {
+                // à nous de voir selon le niveau de restriction...
+                // throw new Exception("La méthode {$nomSet} n'existe pas");
+            }
+            else {
+                // appel au set
+                $this->$nomSet($valeur);
+            }
+        }
+    }
+
+    public function __construct(array $init)
+    {
+        $this->hydrate($init);
         $this->exemplaires = new ArrayCollection();
         $this->auteurs = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
