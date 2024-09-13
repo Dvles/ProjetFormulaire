@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}afficher aeroport!{% endblock %}
+
+{% block body %}
+Vue qui affiche aeroport
+
+<ul>
+    {% for aeroport in aeroports %}
+
+    <li> <strong>{{ aeroport.code }} - {{ aeroport.nom }} </strong></li>
+    {# <li> {{ aeroport.description }}</li> #}
+    <a href="{{ path ('UpdateAeroport', {id: aeroport.id}) }}">Update</a> <a href="">Delete</a> 
+    <br> <br>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
