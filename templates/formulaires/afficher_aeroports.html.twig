@@ -10,7 +10,7 @@ Vue qui affiche aeroport
 
     <li> <strong>{{ aeroport.code }} - {{ aeroport.nom }} </strong></li>
     {# <li> {{ aeroport.description }}</li> #}
-    <a href="{{ path ('UpdateAeroport', {id: aeroport.id}) }}">Update</a> <a href="">Delete</a> 
+    <a href="{{ path ('UpdateAeroport', {id: aeroport.id}) }}">Update</a> <a href={{ path ('DeleteAeroport', {id: aeroport.id}) }}>Delete</a> 
     <br> <br>
 
     {% endfor %}

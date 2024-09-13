@@ -8,6 +8,7 @@ use App\Repository\AeroportRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,7 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class FormulairesController extends AbstractController
 {
 
-    
+    public ManagerRegistry $doctrine;
+    // injecter le ManagerRegistry dans le constructeur
+    public function __construct(ManagerRegistry $doctrine)
+    {
+      $this->doctrine = $doctrine;   
+    }
 
 
     #[Route('/formulaires', name: 'app_formulaires')]
@@ -25,7 +31,7 @@ class FormulairesController extends AbstractController
     }
 
     #[Route('/formulaires/aeroport/ajouter', name: 'app_aeroport_ajouter')]
-    public function aeroportAfficher(Request $req, ManagerRegistry $doctrine): Response
+    public function aeroportAfficher(Request $req): Response
     {
         $aeroport = new Aeroport(); // mettre dans entité, par defaut array vide otherwise //$aeroport = new Aeroport([]);
         
@@ -38,7 +44,7 @@ class FormulairesController extends AbstractController
         // si c'est POST, on va visualiser le contenu de l'entité
         if ($form->isSubmitted() && $form->isValid()){ // isValid regarde toutes les contraintes
 
-            $em = $doctrine->getManager();
+            $em = $this->doctrine->getManager();
             $em->persist($aeroport);
             $em->flush();
             dd($aeroport); //TO DEBUG
@@ -53,11 +59,11 @@ class FormulairesController extends AbstractController
 
 
     // action qui affiche les aeroports
-    #[Route('/formulaires/afficher/aeroports', name: 'app_formulaires')]
-    public function afficherAeroports(ManagerRegistry $doctrine): Response
+    #[Route('/formulaires/afficher/aeroports', name: 'afficherAeroports')]
+    public function afficherAeroports(): Response
     {
         // obtenir tout de la DB
-        $em = $doctrine->getManager();
+        $em = $this->doctrine->getManager();
         $aeroports = $em->getRepository(Aeroport::class)->findAll();
         // dd($aeroports);
         $vars = ['aeroports' => $aeroports];
@@ -90,6 +96,24 @@ class FormulairesController extends AbstractController
         $vars = ['formulaireAeroport'=>$form];
 
         return $this->render('formulaires/update_aeroports.html.twig', $vars);
+
+
+
+
+    }
+
+    // delete de l'aeroport
+    #[Route ('/formulaires/delete/aeroport/{id}', name: 'DeleteAeroport')]
+    public function deleteAeroport(Request $req, AeroportRepository $rep, EntityManagerInterface $em){
+
+        $id = $req->get('id');
+        $aeroport = $rep->find($id);
+        // dd($aeroport);
+
+        $em->remove($aeroport);
+        $em->flush();
+
+        return $this->redirectToRoute('afficherAeroports') ;
 
 
 
