@@ -21,7 +21,9 @@ class LivreRepository extends ServiceEntityRepository
 
     public function livresEntreDeuxPrix(array $filtres){
         $em = $this->doctrine->getManager();
-        $query = $em->createQuery('SELECT l.titre, l.prix, l.description FROM App\Entity\Livre l');
+        $query = $em->createQuery('SELECT l.titre, l.prix, l.description FROM App\Entity\Livre l WHERE l.prix BETWEEN :prixMin AND :prixMax');
+        $query->setParameter("prixMin", $filtres['prixMin']);
+        $query->setParameter("prixMax", $filtres['prixMax']);
         $livres = $query->getResult();
         dd($livres);
     }
