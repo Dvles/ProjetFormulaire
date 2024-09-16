@@ -29,7 +29,7 @@ class AuteurLivresFixtures extends Fixture implements DependentFixtureInterface
             $livre->addAuteur($auteur);
         }
 
-        $manager->flush();
+        $manager->flush(); 
     }
 
     public function getDependencies()
