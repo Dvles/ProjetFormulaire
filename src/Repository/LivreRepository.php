@@ -11,9 +11,19 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LivreRepository extends ServiceEntityRepository
 {
+    Public ManagerRegistry $doctrine;
+    
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Livre::class);
+        $this->doctrine = $registry;
+    }
+
+    public function livresEntreDeuxPrix(array $filtres){
+        $em = $this->doctrine->getManager();
+        $query = $em->createQuery('SELECT l.titre, l.prix, l.description FROM App\Entity\Livre l');
+        $livres = $query->getResult();
+        dd($livres);
     }
 
 //    /**

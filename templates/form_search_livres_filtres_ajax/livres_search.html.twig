@@ -1,10 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FormSearchLivresFiltresAjaxController!{% endblock %}
+{% block title %}Hello FormSearchLivresFiltresController!{% endblock %}
 
 {% block body %}
 
+{{ form_start (form) }}
+{{ form_row(form.titre)}}
+{{ form_row(form.prixMin)}}
+{{ form_row(form.prixMax)}}
+ <button type="submit">Search</button>
+ {{ form_end(form) }} 
 
-  {{ form_start (form) }}
-  {{ form_end (form) }}
+{# {% for elem in form %}#}
+{# {{ form_row (elem) }}#}
+{# <input type="submit" value="ok!">#}
+{# {% endfor %}  #}
+
+
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres Search{% endblock %}
+
+{% block body %}
+    <h1>Résultat de la recherche:</h1>
+
+    <ul>
+    {% for livre in livres %}
+        <li>
+            <strong>Titre:</strong> {{ livre.titre }} <br>
+            <strong>Prix:</strong> {{ livre.prix }} <br>
+            <strong>Description:</strong> {{ livre.description }} <br>
+        </li>
+    {% else %}
+        <li>Aucun résultat trouvé.</li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
