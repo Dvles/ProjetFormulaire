@@ -12,8 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FormSearchLivresFiltresAjaxController extends AbstractController
 {
-    #[Route('/livres/search', name: 'livresSearch')]
-    public function index(Request $req, LivreRepository $rep): Response
+    #[Route('/livres/search', name: 'livres_search')]
+    public function livresSearch(Request $req, LivreRepository $rep): Response
     {
         $form = $this->createForm(SearchFiltreLivresType::class);
         $form->handleRequest($req);
@@ -23,9 +23,13 @@ class FormSearchLivresFiltresAjaxController extends AbstractController
             
             //$livres = $rep->findAll(); // array d'objets
             $livres = $rep->livresEntreDeuxPrix($form->getData()); // array d'objets
+            //dd($livres);
 
             $vars = ['livres' => $livres];
-            return $this->render('form_search_livres_filtres_ajax/livres_search_afficher.html.twig', $vars);
+
+            // bonne pratique est de diriger vers action
+            return $this->redirectToRoute('livres_search_afficher', $vars);
+            
             // $rep->findAll(); // array d'objets
             // dd($form->getData());
         }
@@ -33,5 +37,10 @@ class FormSearchLivresFiltresAjaxController extends AbstractController
         $vars = ['form' => $form];
         //return $this->render('form_search_livres_filtres_ajax/livres_search_afficher.html.twig');
         return $this->render('form_search_livres_filtres_ajax/livres_search.html.twig', $vars);
+    }
+
+    #[Route('/livres/search/afficher', name: 'livres_search_afficher')]
+    public function livreSearchAfficherResultats(array $array): Response{
+        return $this->render('form_search_livres_filtres_ajax/livres_search_afficher.html.twig', $array);
     }
 }
