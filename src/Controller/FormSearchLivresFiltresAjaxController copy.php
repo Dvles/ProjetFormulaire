@@ -9,14 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class FormSearchLivresFiltresAjaxController extends AbstractController
 {
     // utiliser uniquement pour afficher formulaire
     #[Route('/livres/search', name: 'livres_search')]
-    public function livresSearch(Request $req, LivreRepository $rep, SerializerInterface $serializer): Response
+    public function livresSearch(Request $req, LivreRepository $rep): Response
     {
         $form = $this->createForm(SearchFiltreLivresType::class);
         $form->handleRequest($req);
@@ -26,10 +24,7 @@ class FormSearchLivresFiltresAjaxController extends AbstractController
             
             //$livres = $rep->findAll(); // array d'objets
             $livres = $rep->livresEntreDeuxPrix($form->getData()); // array d'objets
-            // dd($livres); 
-            $livresJson = $serializer->serialize($livres, 'json'); // chaine json qu'on peut envoyr au client
-            dd($livresJson);
-            return new Response($livresJson);
+            //dd($livres);
 
             $vars = ['livres' => $livres];
 

@@ -4,12 +4,30 @@
 
 {% block body %}
 
-{{ form_start (form) }}
-{{ form_row(form.titre)}}
-{{ form_row(form.prixMin)}}
-{{ form_row(form.prixMax)}}
- <button type="submit">Search</button>
- {{ form_end(form) }} 
+{{ form_start(form, {'attr': { 'id': 'recherche-form' }}) }}
+{{ form_row(form.titre) }}
+{{ form_row(form.prixMin) }}
+{{ form_row(form.prixMax) }}
+<button type="submit">Search</button>
+{{ form_end(form) }}
+
+{# APPELL AJAX #}
+
+<script>
+let form = document.getElementById('recherche-form');
+form.addEventListener('input', function() {
+
+    console.log('on a modifier le formulaire');
+    let formData = new FormData (form);
+    axios.post('/livres/search', formData )
+    .then(response => {
+        // quoi faire avec la reponse
+        console.log(reponse.data);
+    });
+})
+
+
+</script>
 
 {# {% for elem in form %}#}
 {# {{ form_row (elem) }}#}
